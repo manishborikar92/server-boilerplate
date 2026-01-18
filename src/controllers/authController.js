@@ -50,6 +50,16 @@ const register = asyncHandler(async (req, res) => {
     const accessToken = generateAccessToken(user._id, user.role);
     const refreshToken = generateRefreshToken(user._id);
 
+    try {
+        await Session.createSession({
+            userId: user._id, refreshToken,
+            userAgent: req.headers['user-agent'],
+            ipAddress: req.ip,
+            expiresAt: getRefreshTokenExpirationDate()
+        });
+    } catch (e) { console.warn('Session creation failed', e); }
+
+    user.password = undefined;
     res.status(201).json({
         success: true,
         message: 'User registered successfully',

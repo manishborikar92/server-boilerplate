@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
-const { requestLogger, errorLogger } = require('./middleware/logger');
+const { requestLogger } = require('./middleware/logger');
 const { apiLimiter } = require('./middleware/rateLimiter');
 const { globalErrorHandler, NotFoundError } = require('./utils/errorHandler');
 
@@ -101,7 +101,6 @@ app.use((req, res, next) => {
 });
 
 // Global Error Handler Middleware
-app.use(errorLogger);
 app.use(globalErrorHandler);
 
 module.exports = app;
